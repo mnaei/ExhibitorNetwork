@@ -1,0 +1,57 @@
+<html>
+
+<body>
+    <h1>Hello World?</h1>
+    <input id="name" type="text" name="name" placeholder="name" value="julie">
+    <input id="email" type="email" name="email" placeholder="email" value="j@google.com">
+    <input type="submit" onclick="send()">
+
+    <script>
+
+        function send() {
+            const csrftoken = getCookie('csrftoken');
+
+            if (csrftoken === null) {
+                console.log("cookie not found");
+                return;
+            } else {
+                console.log(csrftoken);
+            }
+
+            let name = document.getElementById("name").value;
+            let email = document.getElementById("email").value;
+
+            fetch("subscribe", {
+                method: "post",
+                mode: "same-origin",
+                headers: {
+                    'content-type': 'application/x-www-form-urlencoded;charset=UTF-8',
+                    'x-csrftoken': csrftoken
+                },
+                body: new URLSearchParams({
+                    'name': name,
+                    'email': email
+                })
+            });
+
+        };
+
+        function getCookie(cname) {
+            var name = cname + "=";
+            var decodedCookie = decodeURIComponent(document.cookie);
+            var ca = decodedCookie.split(';');
+            for (var i = 0; i < ca.length; i++) {
+                var c = ca[i];
+                while (c.charAt(0) == ' ') {
+                    c = c.substring(1);
+                }
+                if (c.indexOf(name) == 0) {
+                    return c.substring(name.length, c.length);
+                }
+            }
+            return null;
+        };
+    </script>
+</body>
+
+</html>
